@@ -1,0 +1,92 @@
+#include<iostream>
+#include<string>
+ 
+using namespace std;
+ 
+class Table
+{
+public:
+ 
+    int height, width;
+    string text;
+ 
+    Table( int h, int w, string t )
+    {
+        height = h ;
+        width = w ;
+        text = t ;
+    }
+ 
+    void draw()
+    {
+        int x = 0 ;
+ 
+        cout << "  " << char( 201 ) ;
+ 
+        for( int i = 0; i < width; i++ )
+            cout << char( 205 ) ;
+ 
+        cout << char( 187 ) << endl ;
+ 
+        for( int i = 0; i < height; i++ )
+        {
+            cout << "  " << char( 186 ) << " " ;
+ 
+            if( x < text.size() )
+            {
+                for( int j = 0; j < 100; j++ )
+                {
+                    if( x == text.size() )
+                    {
+                        for( int k = 0; k < width - j - 1; k++ )
+                            cout << " " ;
+                        break;
+                    }
+ 
+                    if( text[x] != '\n' )
+                    {
+                       cout << text[x] ;
+                       x++;
+                    }
+                    else
+                    {
+                        x++;
+                        for( int k = 0; k < width - j - 1; k++ )
+                            cout << " " ;
+                        break;
+                    }
+                }
+            }
+            else
+                for( int i = 0; i < width - 1; i++ )
+                    cout << " " ;
+ 
+            cout << char( 186 ) << endl ;
+        }
+        cout << "  " << char( 200 ) ;
+ 
+        for( int i = 0; i < width; i++ )
+            cout << char( 205 ) ;
+ 
+        cout << char( 188 ) << endl ;
+    }
+};
+ 
+ 
+ 
+main()
+{
+    string s;
+ 
+//! Table table( height , width , "text" )
+    Table test( 4 , 24 , "   -----TEST-----\nabc def ghi jkl\n123 456 789\n" );
+ 
+    test.draw();
+ 
+    cin >> s;
+    test.text = test.text + s + " LALALA";
+ 
+//  system("cls");
+ 
+    test.draw();
+}
