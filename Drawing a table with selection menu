@@ -1,0 +1,159 @@
+#include<iostream>
+#include<string>
+#include<conio.h>
+#include<windows.h>
+#include<cstdio>
+ 
+using namespace std;
+ 
+class Table
+{
+public:
+ 
+    int height, width ;
+    string text ;
+ 
+    Table( int h, int w, string t )
+    {
+        height = h ;
+        width = w ;
+        text = t ;
+    }
+ 
+    //The bodies of the functions are shown later in the code
+    void draw();
+    int choose( int first_choice_line , int last_choice_line );
+};
+ 
+ 
+ 
+main()
+{
+//! Table table( height , width , "text" )
+    Table test( 6 , 24 , " SELECTION MENU \n\n choose A \n choose B \n choose C" );
+ 
+    test.draw();
+ 
+//!              choose( first_choice_line , last_choice_line )
+    switch( test.choose( 3 , 5 ) )
+    {
+    case 1:
+        cout << "you chose A" << endl;
+        break;
+    case 2:
+        cout << "you chose B" << endl;
+        break;
+    case 3:
+        cout << "you chose C" << endl;
+        break;
+    }
+}
+ 
+ 
+ 
+ 
+void Table::draw()
+{
+    int x = 0 ;
+ 
+    cout << "  " << char( 201 ) ;
+ 
+    for( int i = 0; i < width; i++ )
+        cout << char( 205 ) ;
+ 
+    cout << char( 187 ) << endl ;
+ 
+    for( int i = 0; i < height; i++ )
+    {
+        cout << "  " << char( 186 ) << " " ;
+ 
+        if( x < text.size() )
+        {
+            for( int j = 0; j < 100; j++ )
+            {
+                if( x == text.size() )
+                {
+                    for( int k = 0; k < width - j - 1; k++ )
+                        cout << " " ;
+                    break;
+                }
+ 
+                if( text[x] != '\n' )
+                {
+                   cout << text[x] ;
+                   x++;
+                }
+                else
+                {
+                    x++;
+                    for( int k=0; k < width - j - 1; k++ )
+                        cout << " " ;
+                    break;
+                }
+            }
+        }
+        else
+            for( int i = 0; i < width - 1; i++ )
+                cout << " " ;
+ 
+        cout << char( 186 ) << endl ;
+    }
+    cout << "  " << char( 200 ) ;
+ 
+    for( int i = 0; i < width; i++ )
+        cout << char( 205 ) ;
+ 
+    cout << char( 188 ) << endl ;
+}
+ 
+ 
+int Table::choose( int first_choice_line , int last_choice_line )
+{
+    int cursor_position_Y = first_choice_line;
+ 
+    COORD cursor_coordinates;
+    cursor_coordinates.X = 3;
+    cursor_coordinates.Y = cursor_position_Y;
+ 
+    SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ) , cursor_coordinates );
+    cout << ">" ;
+    cursor_coordinates.Y = last_choice_line + 5;
+    SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ) , cursor_coordinates );
+ 
+    for(;;)
+    {
+        int key=getch();
+ 
+        if ( key == 72 )
+            if( cursor_position_Y != first_choice_line )
+            {
+                cursor_coordinates.Y = cursor_position_Y ;
+                SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ) , cursor_coordinates );
+                cout << " " ;
+                cursor_position_Y-- ;
+                cursor_coordinates.Y = cursor_position_Y ;
+                SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ) , cursor_coordinates );
+                cout << ">" ;
+                cursor_coordinates.Y = last_choice_line + 5 ;
+                SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ) , cursor_coordinates );
+            }
+        if( key == 80 )
+            if( cursor_position_Y != last_choice_line )
+            {
+                cursor_coordinates.Y = cursor_position_Y ;
+                SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ) , cursor_coordinates );
+                cout << " " ;
+                cursor_position_Y++ ;
+                cursor_coordinates.Y = cursor_position_Y ;
+                SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ) , cursor_coordinates );
+                cout << ">" ;
+                cursor_coordinates.Y = last_choice_line + 5;
+                SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ) , cursor_coordinates );
+            }
+        if( key == 13 )
+        {
+            return cursor_position_Y - first_choice_line + 1;
+            break;
+        }
+    }
+}
